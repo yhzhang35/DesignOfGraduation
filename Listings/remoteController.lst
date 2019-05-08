@@ -1,0 +1,28 @@
+C51 COMPILER V9.55   REMOTECONTROLLER                                                      05/01/2019 15:12:41 PAGE 1   
+
+
+C51 COMPILER V9.55, COMPILATION OF MODULE REMOTECONTROLLER
+OBJECT MODULE PLACED IN .\Objects\remoteController.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\remoteController.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\Code) DEBUG OB
+                    -JECTEXTEND PRINT(.\Listings\remoteController.lst) TABS(2) OBJECT(.\Objects\remoteController.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include<remoteController.h>
+   3          //sbit t2=P2^1;
+   4          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,24 @@
+C51 COMPILER V9.55   DIGITAL                                                               05/01/2019 15:12:42 PAGE 1   
+
+
+C51 COMPILER V9.55, COMPILATION OF MODULE DIGITAL
+OBJECT MODULE PLACED IN .\Objects\digital.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\digital.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\Code) DEBUG OBJECTEXTEN
+                    -D PRINT(.\Listings\digital.lst) TABS(2) OBJECT(.\Objects\digital.obj)
+
+line level    source
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

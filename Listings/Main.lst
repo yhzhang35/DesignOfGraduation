@@ -1,0 +1,187 @@
+C51 COMPILER V9.55   MAIN                                                                  05/08/2019 21:43:55 PAGE 1   
+
+
+C51 COMPILER V9.55, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\Main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Code\Main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\Code) DEBUG OBJECTEXTEND P
+                    -RINT(.\Listings\Main.lst) TABS(2) OBJECT(.\Objects\Main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include<bujin.h>
+   3          #include<remoteController.h>
+   4          #include<Lcd1602.h>
+   5          #include<keyBoard.h>
+*** WARNING C318 IN LINE 5 OF Code\Main.c: can't open file 'keyBoard.h'
+   6          #include"serialPort.h"
+   7          
+   8          
+   9          /********************************************************************************************
+  10          ¹¦ÄÜ£º ¸Ã³ÌÐòÊÇÍ¨¹ý×ÔÐ´µÄÉÏÎ»»úÊµÏÖ²½½øµç»úµÄ¿ØÖÆ£¬¿ÉÒÔ¿ØÖÆ²½½øµç»úµÄ×ªÏò£¬×ª¶¯Î»ÒÆ£¬×ª¶¯ËÙ¶È£¬²¢ÄÜÍ¨¹ýºìÍ
+             -âÈÈ¸Ð¸ÐÓ¦µ½ÈËÊµÏÖ
+  11          ²½½øµç»úµÄ¼±Í£¡£²¢ÄÜ½«Ïà¹ØÊý¾ÝÉÏ´«µ½µçÄÔ£¬ÓÃÒÔÎÄ¼þµÄÐÎÊÆÀ´±£´æÕâÐ©Êý¾Ý
+  12          
+  13          
+  14          **********************************************************************************************/
+  15          void delay(unsigned int i);
+  16          //½«½ÓÊÕµ½µÄÊý¾Ý½øÐÐ×ª»»
+  17          void convert();
+  18          
+  19          //ÖÐ¶Ï³õÊ¼»¯º¯Êý
+  20          void interInit();
+  21          
+  22          //¶¨ÒåÈ«¾Ö±äÁ¿
+  23          bit direction=0;
+  24          double arc=12.70;
+  25          double speed=2.2;
+  26          unsigned char dat[11];
+  27          
+  28          
+  29          //ÒÔÏÂÖ÷³ÌÐòÎÒÁÐ³öÁËÖ÷ÒªµÄ¿ò¼Ü£¬»¹ÒªÍ¨¹ýÒÔºóµÄ±àÐ´À´ÊµÏÖ
+  30          void main()
+  31          {
+  32   1        bit flag=0;
+  33   1      
+  34   1        unsigned char i;
+  35   1        unsigned char symbal;
+  36   1        
+  37   1        
+  38   1        //´®¿Ú³õÊ¼»¯
+  39   1        serialInit();
+  40   1        //lcd1602³õÊ¼»¯
+  41   1        lcdInitial();
+  42   1        //ÖÐ¶Ï³õÊ¼»¯
+  43   1        interInit();
+  44   1        
+  45   1        P0=0x77;
+  46   1        while(1)
+  47   1        {
+  48   2      
+  49   2          //Í¨¹ý´®¿Ú¶ÁÈ¡Ïà¹Ø¿ØÖÆÊý¾Ý
+  50   2          if(flag==0)
+  51   2          {
+  52   3            if(readByte()=='*')
+C51 COMPILER V9.55   MAIN                                                                  05/08/2019 21:43:55 PAGE 2   
+
+  53   3            {
+  54   4              for(i=0;i<11;i++)
+  55   4              {
+  56   5                dat[i]=readByte();
+  57   5                
+  58   5              }
+  59   4              flag=1;
+  60   4            }
+  61   3            sendByte('*');
+  62   3            for(i=0;i<11;i++)
+  63   3              {
+  64   4                sendByte(dat[i]);
+  65   4                
+  66   4              }
+  67   3      
+  68   3          }
+  69   2          
+  70   2          
+  71   2          if(flag)
+  72   2          {
+  73   3          convert();  //´¦Àí½ÓÊÕµ½µÄÊý¾Ý£¬½«Æä×ª»»µ½¶ÔÓ¦µÄ»¡¶ÈºÍËÙ¶È¡£ 
+  74   3          
+  75   3          //Í¨¹ýlcd1602ÏÔÊ¾ÊÕµ½µÄÊý¾Ý
+  76   3          processData(arc,direction,speed,dat);
+  77   3          display(dat);
+  78   3            
+  79   3          //µ÷ÓÃ²½½øµç»úÔËÐÐ³ÌÐò   
+  80   3           run(arc,direction,speed);
+  81   3            
+  82   3            //´¦Àí±êÖ¾
+  83   3            sendByte('*');
+  84   3            flag=0;
+  85   3          }
+  86   2          
+  87   2          
+  88   2          //ÔÚÔËÐÐ¹ý³ÌÖÐ´æÔÚÁ½¸öÖÐ¶Ï  Ò»¸öÊÇÍ¨¹ý°´¼üÊµÏÖµÄÆÕÍ¨ÔÝÍ£ÖÐ¶Ï ÁíÒ»¸öÊÇ±£ÕÏÈËÉí°²È«µÄ¼±Í£ÖÐ¶Ï
+  89   2          //Èç¹û×ß¹ýÒ»È¦¸üÐÂÊýÂë¹ÜÏÔÊ¾
+  90   2        }
+  91   1        
+  92   1      }
+*** WARNING C280 IN LINE 35 OF Code\Main.c: 'symbal': unreferenced local variable
+  93          
+  94          void delay(unsigned int i)
+  95          {
+  96   1        while(--i);
+  97   1      }
+  98          
+  99          //ÊµÏÖÊý¾ÝµÄ×ª»»
+ 100          //ÊäÈë¸ñÊ½±ÈÈç 22.22522.22
+ 101          void convert()
+ 102          {
+ 103   1        unsigned int temp=0;
+ 104   1        unsigned char i;
+ 105   1        //´¦Àí»¡¶È
+ 106   1        arc=0.0;
+ 107   1        for(i=0;i<5;i++)
+ 108   1        {
+ 109   2          if(dat[i]=='.')
+ 110   2            continue;
+ 111   2          temp*=10;
+ 112   2          temp+=(dat[i]-'0');
+ 113   2          
+C51 COMPILER V9.55   MAIN                                                                  05/08/2019 21:43:55 PAGE 3   
+
+ 114   2        }
+ 115   1        arc=temp;
+ 116   1        arc=arc*0.01;
+ 117   1        
+ 118   1        //´¦Àí·½Ïò
+ 119   1        if((dat[5]-'0')>0)
+ 120   1          direction =1;
+ 121   1        else 
+ 122   1          direction =0;
+ 123   1        
+ 124   1        
+ 125   1        //´¦ÀíËÙ¶È
+ 126   1        speed=0.0;
+ 127   1        temp=0;
+ 128   1        for(i=0;i<5;i++)
+ 129   1        {
+ 130   2          if(dat[i+6]=='.')
+ 131   2            continue;
+ 132   2          temp*=10;
+ 133   2          temp+=(dat[6+i]-'0');
+ 134   2        }
+ 135   1        speed=temp;
+ 136   1        speed=speed*0.01;
+ 137   1      }
+ 138          
+ 139          //ÖÐ¶Ï³õÊ¼»¯º¯Êý
+ 140          void interInit()
+ 141          {
+ 142   1        //³õÊ¼»¯ÖÐ¶Ï0
+ 143   1        IT0=1; //±ßÑØ´¥·¢·½Ê½
+ 144   1        EX0=1; //¿ªÖÐ¶Ï
+ 145   1        EA=1;
+ 146   1      }
+ 147          
+ 148          //ÖÐ¶Ïº¯Êý
+ 149          void Stop() interrupt 0
+ 150          {
+ 151   1        EA=0;
+ 152   1        while(!IE0);
+ 153   1        IE0=0;
+ 154   1        EA=1;
+ 155   1        
+ 156   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    407    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     19       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

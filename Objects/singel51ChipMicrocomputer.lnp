@@ -1,0 +1,6 @@
+".\Objects\Main.obj",
+".\Objects\bujin.obj",
+".\Objects\Lcd1602.obj",
+".\Objects\serialPort.obj" 
+TO ".\Objects\singel51ChipMicrocomputer" 
+PRINT(".\Listings\singel51ChipMicrocomputer.m51")
